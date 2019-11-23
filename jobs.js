@@ -111,6 +111,7 @@ const addJob = () => {
         });
 };
 
+
 const reviewJobs = () => {
    connection.query("SELECT * FROM applications", function(err, results) {
        if (err) throw (err);
@@ -118,3 +119,26 @@ const reviewJobs = () => {
    });
 
 };
+
+
+const updateJob = () => {
+    connection.query("SELECT * FROM applications", function(err, results) {
+        if (err) throw (err);
+        inquirer
+        .prompt([
+            {
+                name: "choice",
+                type: "list",
+                choices: function () {
+                    let choiceArray = [];
+                    for (let i=0; i < results.length; i++) {
+                        choiceArray.push(results[i].company);
+                    }
+                    return choiceArray;
+                },
+                message: "Which company's job application would you like to update?"
+            }
+        ])
+    })
+ 
+}
