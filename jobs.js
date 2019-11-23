@@ -18,11 +18,11 @@ const connection = mysql.createConnection({
 connection.connect(function(err) {
     if (err) throw err;
     console.log("🌐 connected as id " + connection.threadId + "\n");
-    getStarted();
+    mainMenu();
 });
 
 //initial inquiry
-const getStarted = () => {
+const mainMenu = () => {
     inquirer
         .prompt({
             name: "choice",
@@ -32,7 +32,8 @@ const getStarted = () => {
                 "Add a new job application",
                 "Review all job applications",
                 "Update a job application",
-                "Delete a job application"
+                "Delete a job application",
+                "Exit"
             ]
         })
         .then(function(answer) {
@@ -52,7 +53,10 @@ const getStarted = () => {
             case "Delete a job application":
                 deleteJob();
                 break;
-
+            
+            case "Exit":
+                connection.end();
+                break;
             };
         });
 }
@@ -106,6 +110,7 @@ const addJob = () => {
                 function(err) {
                     if (err) throw (err);
                     console.log("Job successfully added  👍 \n");
+                    mainMenu();
                 }
             )
         });
@@ -117,6 +122,28 @@ const reviewJobs = () => {
        if (err) throw (err);
        console.log(results);
    });
+   inquirer
+    .prompt([
+        {
+            name: "choice",
+            type: "list",
+            choices: [
+                "Main Menu",
+                "Exit"
+            ]
+        }
+    ])
+    .then(function (answers) {
+        switch(answers.choice) {
+            case "Main Menu":
+                mainMenu();
+                break;
+            
+            case "Exit":
+                connection.end();
+                break;
+        }
+    });
 
 };
 
