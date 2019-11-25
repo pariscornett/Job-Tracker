@@ -122,13 +122,8 @@ const addJob = () => {
         });
 };
 
-
-const reviewJobs = () => {
-   connection.query("SELECT * FROM applications", function(err, results) {
-       if (err) throw (err);
-       console.log(results);
-   });
-   inquirer
+const continueOption = () => {
+    inquirer
     .prompt([
         {
             name: "choice",
@@ -151,6 +146,16 @@ const reviewJobs = () => {
         }
     });
 
+}
+
+
+const reviewJobs = () => {
+   connection.query("SELECT * FROM applications", function(err, results) {
+       if (err) throw (err);
+       console.log(results);
+       continueOption();
+   });
+   
 };
 
 const selectCompanyToUpdate = () => {
@@ -256,7 +261,7 @@ const updateJob = (selectedCompany) => {
                         function(err, res) {
                             if (err) throw (err);
                             console.log(res.affectedRows + " applications updated!\n");
-                            mainMenu();
+                            continueOption();
                         }
                         );
                         break;
@@ -273,7 +278,7 @@ const updateJob = (selectedCompany) => {
                             function(err, res) {
                                 if (err) throw (err);
                                 console.log(res.affectedRows + " applications updated!\n");
-                                mainMenu();
+                                continueOption();
                             }
                             );
                             break;
@@ -290,7 +295,7 @@ const updateJob = (selectedCompany) => {
                                 function(err, res) {
                                     if (err) throw (err);
                                     console.log(res.affectedRows + " applications updated!\n");
-                                    mainMenu();
+                                    continueOption();
                                 }
                                 );
                                 break;
@@ -307,7 +312,7 @@ const updateJob = (selectedCompany) => {
                                 function(err, res) {
                                     if (err) throw (err);
                                     console.log(res.affectedRows + " applications updated!\n");
-                                    mainMenu();
+                                    continueOption();
                                 }
                                 );
                                 break;
@@ -324,14 +329,14 @@ const updateJob = (selectedCompany) => {
                                 function(err, res) {
                                     if (err) throw (err);
                                     console.log(res.affectedRows + " applications updated!\n");
-                                    mainMenu();
+                                    continueOption();
                                 }
                                 );
                                 break;
                         
                 }
            } else {
-               mainMenu();
+               continueOption();
            }
        })
    })
@@ -361,36 +366,102 @@ const trackCorrespondence = (selectedCompanyToTrack) => {
         }
     ])
     .then(function (answers) {
-        if(answers.question1 === "Yes") {
-            connection.query("UPDATE applications SET ? WHERE ?",
-            [
-                {
-                    have_you_followed_up: 1
-                },
-                {
-                    company: selectedCompanyToTrack
-                }
-            ], function(err, res) {
-                if (err) throw (err);
-                console.log(res.affectedRows + " applications updated!\n");
-                mainMenu();
-            })
-        } else if(answers.question2 === "Yes") {
-            connection.query("UPDATE applications SET ? WHERE ?", 
-            [
-                {
-                    has_employer_reached_out: 1
-                },
-                {
-                    comnpany: selectedCompanyToTrack
-                }
-            ], function (err, res) {
-                if (err) throw (err);
-                console.log(res.affectedRows + " applications updated!\n");
-                mainMenu();
-            })
-        } else {
-            return;
+        switch (answers.question1) {
+            case "Yes":
+                connection.query("UPDATE applications SET ? WHERE ?",
+                [
+                    {
+                        have_you_followed_up: 1
+                    },
+                    {
+                        company: selectedCompanyToTrack
+                    }
+                ], function(err, res) {
+                    if (err) throw (err);
+                    console.log(res.affectedRows + " applications updated!\n");
+                    continueOption();
+                })
+                break;
+            
+            case "No":
+                    connection.query("UPDATE applications SET ? WHERE ?",
+                    [
+                        {
+                            have_you_followed_up: 0
+                        },
+                        {
+                            company: selectedCompanyToTrack
+                        }
+                    ], function(err, res) {
+                        if (err) throw (err);
+                        console.log(res.affectedRows + " applications updated!\n");
+                        continueOption();
+                    })
+                break;
+        };
+        switch (answers.question2) {
+            case "Yes":
+                connection.query("UPDATE applications SET ? WHERE ?", 
+                [
+                    {
+                        has_employer_reached_out: 1
+                    },
+                    {
+                        company: selectedCompanyToTrack
+                    }
+                ], function (err, res) {
+                    if (err) throw (err);
+                    console.log(res.affectedRows + " applications updated!\n");
+                    continueOption();
+                })
+                break;
+            
+            case "No":
+                connection.query("UPDATE applications SET ? WHERE ?", 
+                [
+                    {
+                        has_employer_reached_out: 0
+                    },
+                    {
+                        company: selectedCompanyToTrack
+                    }
+                ], function (err, res) {
+                    if (err) throw (err);
+                    console.log(res.affectedRows + " applications updated!\n");
+                    continueOption();
+                })
+                break;
         }
+        // if(answers.question1 === "Yes") {
+            // connection.query("UPDATE applications SET ? WHERE ?",
+            // [
+            //     {
+            //         have_you_followed_up: 1
+            //     },
+            //     {
+            //         company: selectedCompanyToTrack
+            //     }
+            // ], function(err, res) {
+            //     if (err) throw (err);
+            //     console.log(res.affectedRows + " applications updated!\n");
+            //     mainMenu();
+            // })
+        // } else if(answers.question2 === "Yes") {
+            // connection.query("UPDATE applications SET ? WHERE ?", 
+            // [
+            //     {
+            //         has_employer_reached_out: 1
+            //     },
+            //     {
+            //         comnpany: selectedCompanyToTrack
+            //     }
+            // ], function (err, res) {
+            //     if (err) throw (err);
+            //     console.log(res.affectedRows + " applications updated!\n");
+            //     mainMenu();
+            // })
+        // } else {
+        //     return;
+        // }
     });
 };
