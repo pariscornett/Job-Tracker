@@ -303,7 +303,7 @@ const updateJob = (selectedCompany) => {
                                 connection.query("UPDATE applications SET ? WHERE ?", 
                                 [
                                     {
-                                        location: answers.edit
+                                        neighborhood: answers.edit
                                     },
                                     {
                                         company: selectedCompany
