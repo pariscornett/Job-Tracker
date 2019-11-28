@@ -378,8 +378,8 @@ const trackCorrespondence = (selectedCompanyToTrack) => {
                     }
                 ], function(err, res) {
                     if (err) throw (err);
-                    console.log(res.affectedRows + " applications updated!\n");
-                    continueOption();
+                    //console.log(res.affectedRows + " applications updated!\n");
+                    //continueOption();
                 })
                 break;
             
@@ -394,8 +394,8 @@ const trackCorrespondence = (selectedCompanyToTrack) => {
                         }
                     ], function(err, res) {
                         if (err) throw (err);
-                        console.log(res.affectedRows + " applications updated!\n");
-                        continueOption();
+                        //console.log(res.affectedRows + " applications updated!\n");
+                        //continueOption();
                     })
                 break;
         };
@@ -411,8 +411,8 @@ const trackCorrespondence = (selectedCompanyToTrack) => {
                     }
                 ], function (err, res) {
                     if (err) throw (err);
-                    console.log(res.affectedRows + " applications updated!\n");
-                    continueOption();
+                    //console.log(res.affectedRows + " applications updated!\n");
+                    //continueOption();
                 })
                 break;
             
@@ -427,41 +427,12 @@ const trackCorrespondence = (selectedCompanyToTrack) => {
                     }
                 ], function (err, res) {
                     if (err) throw (err);
-                    console.log(res.affectedRows + " applications updated!\n");
-                    continueOption();
+                    // console.log(res.affectedRows + " applications updated!\n");
+                    //continueOption();
                 })
                 break;
         }
-        // if(answers.question1 === "Yes") {
-            // connection.query("UPDATE applications SET ? WHERE ?",
-            // [
-            //     {
-            //         have_you_followed_up: 1
-            //     },
-            //     {
-            //         company: selectedCompanyToTrack
-            //     }
-            // ], function(err, res) {
-            //     if (err) throw (err);
-            //     console.log(res.affectedRows + " applications updated!\n");
-            //     mainMenu();
-            // })
-        // } else if(answers.question2 === "Yes") {
-            // connection.query("UPDATE applications SET ? WHERE ?", 
-            // [
-            //     {
-            //         has_employer_reached_out: 1
-            //     },
-            //     {
-            //         comnpany: selectedCompanyToTrack
-            //     }
-            // ], function (err, res) {
-            //     if (err) throw (err);
-            //     console.log(res.affectedRows + " applications updated!\n");
-            //     mainMenu();
-            // })
-        // } else {
-        //     return;
-        // }
+    console.log("👍 applications updated!\n");
+    continueOption();
     });
 };
