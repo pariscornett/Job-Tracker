@@ -53,7 +53,7 @@ const mainMenu = () => {
                 break;
             
             case "Delete a job application":
-                deleteJob();
+                selectCompanyToDelete();
                 break;
             
             case "Track correspondence":
@@ -182,6 +182,30 @@ const selectCompanyToUpdate = () => {
     })
 };
 
+
+const selectCompanyToDelete = () => {
+    connection.query("SELECT * FROM applications", function (err, res) {
+        if (err) throw (err);
+        inquirer
+        .prompt([
+            {
+                name: "company",
+                type: "list",
+                choices: function() {
+                    let companiesArray = [];
+                    for (let i=0; i < res.length; i++) {
+                        companiesArray.push(res[i].company);
+                    }
+                    return companiesArray;
+                }
+            }
+        ])
+        .then(function(answer) {
+            let selectedCompany = answer.company;
+            deleteApp(selectedCompany);
+        })
+    })
+};
 
 const selectCompanyToTrack = () => {
     connection.query("SELECT * FROM applications", function (err, res) {
@@ -436,3 +460,37 @@ const trackCorrespondence = (selectedCompanyToTrack) => {
     continueOption();
     });
 };
+
+
+const deleteApp = (selectedCompany) => {
+    inquirer
+    .prompt([
+        {
+            name:"confirmDelete",
+            type: "list",
+            choices: [
+                "Yes",
+                "No"
+            ],
+            message: "Are you sure you want to delete this application?"
+        }
+    ])
+    .then(function(answer) {
+        if(answer.confirmDelete === "Yes") {
+            connection.query("DELETE FROM applications WHERE ?",
+                {
+                    company: selectedCompany
+                },
+                function(err, res) {
+                    if (err) throw (err);
+                    console.log(res.affectedRows + " application deleted! 🚫 \n");
+                    continueOption();
+                }
+            )
+        } 
+        else {
+            console.log("No worries, we won't make any changes 😎 \n" );
+            mainMenu();
+        }
+    })
+}
